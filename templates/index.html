@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1 class="mb-4">Podcasts</h1>
+  <div class="row">
+    {% for podcast in podcasts %}
+    <div class="col-md-6 col-lg-4">
+      <div class="card mb-4 shadow-sm h-100">
+        <img src="{{ url_for('static', filename=podcast.artwork) }}" class="card-img-top" alt="{{ podcast.name }}">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">{{ podcast.name }}</h5>
+          <a href="{{ url_for('podcast_page', podcast_id=podcast.id) }}" class="btn btn-primary mt-auto">
+            View Episodes
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% endblock %}

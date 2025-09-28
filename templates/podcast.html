@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <img src="{{ url_for('static', filename=podcast.artwork) }}" class="img-fluid rounded shadow-sm mb-3" alt="{{ podcast.name }}">
+    </div>
+    <div class="col-md-8">
+      <h1 class="mb-3">{{ podcast.name }}</h1>
+      <p>
+        <a href="{{ podcast.feed_url }}" target="_blank" class="btn btn-outline-secondary">
+          🔗 View RSS Feed
+        </a>
+      </p>
+    </div>
+  </div>
+
+  <h2 class="mt-5 mb-3">Latest Episodes</h2>
+  <div class="list-group">
+    {% for episode in episodes %}
+      <a href="{{ episode.link }}" target="_blank" class="list-group-item list-group-item-action">
+        <h5 class="mb-1">{{ episode.title }}</h5>
+        {% if episode.published %}
+          <small class="text-muted">{{ episode.published }}</small>
+        {% endif %}
+        {% if episode.summary %}
+          <p class="mb-1">{{ episode.summary|safe }}</p>
+        {% endif %}
+      </a>
+    {% else %}
+      <p class="text-muted">No episodes available at the moment.</p>
+    {% endfor %}
+  </div>
+{% endblock %}

@@ -1,0 +1,14 @@
+[
+  {
+    "id": "wlb",
+    "name": "When Life Bites",
+    "feed_url": "https://feeds.simplecast.com/54nAGcIl", 
+    "artwork": "images/wlb.png"
+  },
+  {
+    "id": "bop",
+    "name": "Business on Purpose",
+    "feed_url": "https://feeds.megaphone.fm/ADV7489074655", 
+    "artwork": "images/bop.png"
+  }
+]
