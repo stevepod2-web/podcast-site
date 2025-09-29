@@ -1,18 +1,18 @@
 [
   {
-    "id": "bop",
+    "name": "bop",
     "title": "Business on Purpose",
-    "description": "Business on Purpose is a Christian business podcast equipping entrepreneurs, leaders, and professionals to align their work with God’s calling. Whether you’re building a startup, leading a team, or navigating the pressures of profit and purpose, we explore servant leadership, biblical wisdom, and kingdom principles for the marketplace. From stewardship and vision to prayer and prophetic insight, we help you integrate faith with business in practical, powerful ways. Because business isn’t just about profit—it’s about purpose.",
-    "artwork": "static/bop.png",
-    "favicon": "static/favicon.ico",
+    "description": "A podcast about building a business with purpose.",
+    "artwork": "bop.png",
+    "favicon": "bop-favicon.ico",
     "feed": "https://example.com/bop.xml"
   },
   {
-    "id": "wlb",
+    "name": "wlb",
     "title": "When Life Bites",
-    "description": "When Life Bites is a Christian podcast offering hope, healing, and help to families walking through trauma, abuse, betrayal, and abandonment. Whether you’re a survivor of sexual abuse, facing family alienation, or grieving a broken marriage, we provide real talk, faith-based encouragement, and practical steps toward healing. Because life bites—but God heals.",
-    "artwork": "static/wlb.png",
-    "favicon": "static/favicon.ico",
+    "description": "Stories and conversations about life’s unexpected turns.",
+    "artwork": "wlb.png",
+    "favicon": "wlb-favicon.ico",
     "feed": "https://example.com/wlb.xml"
   }
 ]
