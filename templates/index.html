@@ -1,55 +1,93 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Podcasts</title>
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  </head>
-  <body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-      <div class="container">
-        <a class="navbar-brand" href="/">Podcast Hub</a>
-      </div>
-    </nav>
+<head>
+  <meta charset="UTF-8">
+  <title>Podcast Directory</title>
+  <meta name="description" content="Listen to Business on Purpose and When Life Bites. Inspiring stories, daily insights, and purposeful conversations.">
 
-    <div class="container">
-      <h1 class="mb-4">Our Podcasts</h1>
+  <!-- Open Graph -->
+  <meta property="og:title" content="Podcast Directory - Business on Purpose & When Life Bites">
+  <meta property="og:description" content="Listen to Business on Purpose and When Life Bites. Inspiring stories, daily insights, and purposeful conversations.">
+  <meta property="og:image" content="{{ url_for('static', filename='bop.png', _external=True) }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ request.url_root }}">
 
-      <!-- Business on Purpose -->
-      <div class="card mb-4 shadow-sm">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Podcast Directory - Business on Purpose & When Life Bites">
+  <meta name="twitter:description" content="Listen to Business on Purpose and When Life Bites. Inspiring stories, daily insights, and purposeful conversations.">
+  <meta name="twitter:image" content="{{ url_for('static', filename='wlb.png', _external=True) }}">
+
+  <!-- Favicon -->
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background-color: #f8f9fa; }
+    .card {
+      max-width: 900px;
+      margin: 20px auto;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .card img {
+      border-radius: 15px 0 0 15px;
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+    .navbar-brand { font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+  <div class="container">
+    <a class="navbar-brand" href="{{ url_for('homepage') }}">🎙️ My Podcasts</a>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <div class="row">
+    <!-- Business on Purpose -->
+    <div class="col-12">
+      <div class="card mb-4">
         <div class="row g-0">
-          <div class="col-md-4 d-flex align-items-center justify-content-center">
-            <img src="{{ url_for('static', filename='bop.png') }}" class="img-fluid rounded-start p-3" alt="Business on Purpose artwork">
+          <div class="col-md-4">
+            <img src="{{ url_for('static', filename='bop.png') }}" alt="Business on Purpose artwork" class="img-fluid h-100">
           </div>
           <div class="col-md-8">
             <div class="card-body">
-              <h2 class="card-title">Business on Purpose</h2>
-              <p class="card-text">Business on Purpose empowers entrepreneurs and leaders to build companies that align with their values and create lasting impact. Discover actionable insights, inspiring stories, and practical tools for sustainable growth.</p>
-              <a href="{{ url_for('podcast', name='bop') }}" class="btn btn-primary">View Episodes</a>
+              <h5 class="card-title">Business on Purpose</h5>
+              <p class="card-text">Helping you align your work and life with greater purpose. Business strategies, faith-driven leadership, and practical tools for building a business that matters.</p>
+              <a href="{{ url_for('podcast_page', name='bop') }}" class="btn btn-primary">View Episodes</a>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- When Life Bites -->
-      <div class="card mb-4 shadow-sm">
-        <div class="row g-0">
-          <div class="col-md-4 d-flex align-items-center justify-content-center">
-            <img src="{{ url_for('static', filename='wlb.png') }}" class="img-fluid rounded-start p-3" alt="When Life Bites artwork">
-          </div>
-          <div class="col-md-8">
-            <div class="card-body">
-              <h2 class="card-title">When Life Bites</h2>
-              <p class="card-text">When Life Bites is your daily dose of reflection, resilience, and real talk. From overcoming setbacks to celebrating small wins, we explore stories that help you navigate the ups and downs of everyday life with grace and humor.</p>
-              <a href="{{ url_for('podcast', name='wlb') }}" class="btn btn-primary">View Episodes</a>
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
+
+    <!-- When Life Bites -->
+    <div class="col-12">
+      <div class="card mb-4">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="{{ url_for('static', filename='wlb.png') }}" alt="When Life Bites artwork" class="img-fluid h-100">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">When Life Bites</h5>
+              <p class="card-text">Your daily companion for navigating life’s challenges. Bite-sized insights, practical wisdom, and encouragement to keep moving forward when life gets tough.</p>
+              <a href="{{ url_for('podcast_page', name='wlb') }}" class="btn btn-primary">View Episodes</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
 </html>

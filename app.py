@@ -1,51 +1,29 @@
-import json
-from flask import Flask, render_template, url_for
-import feedparser
+from flask import Flask, render_template
+import json, os
 
 app = Flask(__name__)
 
-# Define podcasts
-podcasts = {
-    "bop": {
-        "title": "Building on Purpose",
-        "feed_url": "https://feeds.buzzsprout.com/XXXXX.rss",  # replace with actual
-        "artwork": "bop.png",
-        "description": "A podcast about building intentional businesses."
-    },
-    "wlb": {
-        "title": "When Life Bites",
-        "feed_url": "https://feeds.buzzsprout.com/YYYYY.rss",  # replace with actual
-        "artwork": "wlb.png",
-        "description": "Stories and insights about navigating life’s challenges."
-    }
-}
-
+# Load podcast data from JSON
+with open("podcasts.json", "r") as f:
+    podcasts = json.load(f)
 
 @app.route("/")
-def homepage():
-    """Homepage: show all podcasts in card layout"""
+def index():
     return render_template("index.html", podcasts=podcasts)
 
-
-@app.route("/podcast/<podcast_id>")
-def podcast_page(podcast_id):
-    """Show episodes for a specific podcast"""
-    podcast = podcasts.get(podcast_id)
+@app.route("/podcast/<name>")
+def podcast_page(name):
+    podcast = podcasts.get(name)
     if not podcast:
         return "Podcast not found", 404
 
-    entries = []
-    try:
-        feed = feedparser.parse(podcast["feed_url"])
-        if feed.bozo:
-            print(f"Warning: problem parsing {podcast['feed_url']} – {feed.bozo_exception}")
-        else:
-            entries = feed.entries[:10]  # show latest 10
-    except Exception as e:
-        print(f"Error parsing feed {podcast['feed_url']}: {e}")
-
-    return render_template("podcast.html", podcast=podcast, entries=entries)
-
+    return render_template(
+        "podcast.html",
+        title=podcast["title"],
+        description=podcast["description"],
+        artwork=podcast["artwork"],
+        episodes=podcast.get("episodes", []),
+    )
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=10000)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
