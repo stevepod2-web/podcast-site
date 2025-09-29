@@ -1,37 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>{{ podcast.name }}</title>
-  <link rel="icon" href="{{ podcast.favicon }}">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ podcast.name }} – Podcast Hub</title>
+    <meta name="description" content="{{ podcast.description }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
 </head>
 <body>
-  <div class="container mt-5">
-    <a href="/" class="btn btn-secondary mb-3">← Back to Home</a>
-    <div class="text-center">
-      <img src="{{ podcast.artwork }}" alt="{{ podcast.name }}" class="img-fluid mb-3" style="max-width:200px;">
-      <h1>{{ podcast.name }}</h1>
-      <p class="lead">{{ podcast.description }}</p>
+    <div class="container my-5">
+        <h1>{{ podcast.name }}</h1>
+        <p>{{ podcast.description }}</p>
+        <hr>
+        <h3>Episodes</h3>
+        {% if podcast.episodes %}
+            <ul class="list-group">
+                {% for episode in podcast.episodes %}
+                <li class="list-group-item">
+                    <h5>{{ episode.title }}</h5>
+                    <p>{{ episode.description }}</p>
+                    <audio controls>
+                        <source src="{{ url_for('static', filename=episode.audio) }}" type="audio/mpeg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No episodes available yet.</p>
+        {% endif %}
     </div>
-    <hr>
-    <h2>Episodes</h2>
-    {% if podcast.episodes %}
-      <ul class="list-group">
-        {% for ep in podcast.episodes %}
-          <li class="list-group-item">
-            <h5>{{ ep.title }}</h5>
-            <p>{{ ep.description }}</p>
-            <audio controls>
-              <source src="{{ ep.audio_url }}" type="audio/mpeg">
-              Your browser does not support the audio element.
-            </audio>
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p>No episodes available yet.</p>
-    {% endif %}
-  </div>
 </body>
 </html>
