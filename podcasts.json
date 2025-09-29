@@ -1,36 +1,18 @@
-{
-  "bop": {
+[
+  {
+    "id": "bop",
     "title": "Business on Purpose",
     "description": "Business on Purpose is a Christian business podcast equipping entrepreneurs, leaders, and professionals to align their work with God’s calling. Whether you’re building a startup, leading a team, or navigating the pressures of profit and purpose, we explore servant leadership, biblical wisdom, and kingdom principles for the marketplace. From stewardship and vision to prayer and prophetic insight, we help you integrate faith with business in practical, powerful ways. Because business isn’t just about profit—it’s about purpose.",
     "artwork": "static/bop.png",
-    "episodes": [
-      {
-        "title": "Episode 1: Building Faith into Business",
-        "description": "How to align your startup with kingdom principles.",
-        "audio": "https://example.com/bop-ep1.mp3"
-      },
-      {
-        "title": "Episode 2: Servant Leadership",
-        "description": "Practical strategies to lead with humility and vision.",
-        "audio": "https://example.com/bop-ep2.mp3"
-      }
-    ]
+    "favicon": "static/favicon.ico",
+    "feed": "https://example.com/bop.xml"
   },
-  "wlb": {
+  {
+    "id": "wlb",
     "title": "When Life Bites",
     "description": "When Life Bites is a Christian podcast offering hope, healing, and help to families walking through trauma, abuse, betrayal, and abandonment. Whether you’re a survivor of sexual abuse, facing family alienation, or grieving a broken marriage, we provide real talk, faith-based encouragement, and practical steps toward healing. Because life bites—but God heals.",
     "artwork": "static/wlb.png",
-    "episodes": [
-      {
-        "title": "Episode 1: Surviving Betrayal",
-        "description": "Steps toward healing after deep personal wounds.",
-        "audio": "https://example.com/wlb-ep1.mp3"
-      },
-      {
-        "title": "Episode 2: God Heals",
-        "description": "Finding faith in seasons of grief and loss.",
-        "audio": "https://example.com/wlb-ep2.mp3"
-      }
-    ]
+    "favicon": "static/favicon.ico",
+    "feed": "https://example.com/wlb.xml"
   }
-}
+]
