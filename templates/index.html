@@ -2,92 +2,52 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Podcast Directory</title>
-  <meta name="description" content="Listen to Business on Purpose and When Life Bites. Inspiring stories, daily insights, and purposeful conversations.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Podcasts</title>
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="Podcast Directory - Business on Purpose & When Life Bites">
-  <meta property="og:description" content="Listen to Business on Purpose and When Life Bites. Inspiring stories, daily insights, and purposeful conversations.">
-  <meta property="og:image" content="{{ url_for('static', filename='bop.png', _external=True) }}">
+  <!-- SEO / Open Graph -->
+  <meta name="description" content="Christian podcasts: Business on Purpose and When Life Bites. Encouragement, leadership, healing, and hope.">
+  <meta property="og:title" content="My Podcasts">
+  <meta property="og:description" content="Christian podcasts: Business on Purpose and When Life Bites. Encouragement, leadership, healing, and hope.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="{{ request.url_root }}">
-
-  <!-- Twitter Card -->
+  <meta property="og:image" content="{{ url_for('static', filename='bop.png', _external=True) }}">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Podcast Directory - Business on Purpose & When Life Bites">
-  <meta name="twitter:description" content="Listen to Business on Purpose and When Life Bites. Inspiring stories, daily insights, and purposeful conversations.">
+  <meta name="twitter:title" content="My Podcasts">
+  <meta name="twitter:description" content="Christian podcasts: Business on Purpose and When Life Bites. Encouragement, leadership, healing, and hope.">
   <meta name="twitter:image" content="{{ url_for('static', filename='wlb.png', _external=True) }}">
 
-  <!-- Favicon -->
-  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body { background-color: #f8f9fa; }
-    .card {
-      max-width: 900px;
-      margin: 20px auto;
-      border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    .card img {
-      border-radius: 15px 0 0 15px;
-      object-fit: cover;
-      width: 100%;
-      height: 100%;
-    }
-    .navbar-brand { font-weight: bold; }
-  </style>
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container">
+      <a class="navbar-brand" href="{{ url_for('index') }}">🎙️ My Podcasts</a>
+    </div>
+  </nav>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
   <div class="container">
-    <a class="navbar-brand" href="{{ url_for('homepage') }}">🎙️ My Podcasts</a>
-  </div>
-</nav>
-
-<div class="container mt-4">
-  <div class="row">
-    <!-- Business on Purpose -->
-    <div class="col-12">
-      <div class="card mb-4">
-        <div class="row g-0">
-          <div class="col-md-4">
-            <img src="{{ url_for('static', filename='bop.png') }}" alt="Business on Purpose artwork" class="img-fluid h-100">
-          </div>
-          <div class="col-md-8">
-            <div class="card-body">
-              <h5 class="card-title">Business on Purpose</h5>
-              <p class="card-text">Helping you align your work and life with greater purpose. Business strategies, faith-driven leadership, and practical tools for building a business that matters.</p>
-              <a href="{{ url_for('podcast_page', name='bop') }}" class="btn btn-primary">View Episodes</a>
+    <div class="row">
+      {% for podcast in podcasts %}
+      <div class="col-md-6 mb-4">
+        <div class="card h-100 shadow-sm">
+          <div class="row g-0">
+            <div class="col-4">
+              <img src="{{ url_for('static', filename=podcast.image) }}" class="img-fluid rounded-start" alt="{{ podcast.title }}">
+            </div>
+            <div class="col-8">
+              <div class="card-body">
+                <h5 class="card-title">{{ podcast.title }}</h5>
+                <p class="card-text">{{ podcast.description }}</p>
+                <a href="{{ url_for('podcast_page', name=podcast.id) }}" class="btn btn-primary">View Episodes</a>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- When Life Bites -->
-    <div class="col-12">
-      <div class="card mb-4">
-        <div class="row g-0">
-          <div class="col-md-4">
-            <img src="{{ url_for('static', filename='wlb.png') }}" alt="When Life Bites artwork" class="img-fluid h-100">
-          </div>
-          <div class="col-md-8">
-            <div class="card-body">
-              <h5 class="card-title">When Life Bites</h5>
-              <p class="card-text">Your daily companion for navigating life’s challenges. Bite-sized insights, practical wisdom, and encouragement to keep moving forward when life gets tough.</p>
-              <a href="{{ url_for('podcast_page', name='wlb') }}" class="btn btn-primary">View Episodes</a>
-            </div>
-          </div>
-        </div>
-      </div>
+      {% endfor %}
     </div>
   </div>
-</div>
-
 </body>
 </html>
