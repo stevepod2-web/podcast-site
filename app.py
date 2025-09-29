@@ -1,40 +1,23 @@
 import json
 import feedparser
-from flask import Flask, render_template, abort
+from flask import abort
 
-app = Flask(__name__)
-
-# Load podcast config from JSON
-with open("podcasts.json") as f:
-    PODCASTS = json.load(f)
-
-
-@app.route("/")
-def index():
-    """Homepage: show all podcasts"""
-    return render_template("index.html", podcasts=PODCASTS)
-
-
-@app.route("/podcast/<podcast_id>")
-def podcast_page(podcast_id):
-    """Show episodes for a given podcast"""
-    podcast = next((p for p in PODCASTS if p["id"] == podcast_id), None)
+@app.route("/podcast/<podcast_name>")
+def podcast_page(podcast_name):
+    podcast = next((p for p in podcasts if p["name"] == podcast_name), None)
     if not podcast:
-        abort(404)
+        abort(404, description="Podcast not found")
 
-    print("Fetching feed:", podcast["feed_url"])
     try:
         feed = feedparser.parse(podcast["feed_url"])
-        if feed.bozo:
-            raise ValueError(f"Malformed feed: {podcast['feed_url']}")
+        if feed.bozo:  # feedparser sets this if there was a parsing error
+            print(f"Feed parsing error for {podcast['feed_url']}: {feed.bozo_exception}")
+            abort(500, description="Feed parsing failed")
     except Exception as e:
-        print(f"Error parsing {podcast['feed_url']}: {e}")
-        return f"Failed to load feed: {podcast['feed_url']}", 500
+        print(f"Error fetching feed {podcast['feed_url']}: {e}")
+        abort(500, description="Error fetching feed")
 
-    episodes = feed.entries[:10]  # Limit to 10 episodes for now
-
-    return render_template("podcast.html", podcast=podcast, episodes=episodes)
-
+    return render_template("podcast.html", podcast=podcast, feed=feed)
 
 if __name__ == "__main__":
     app.run(debug=True)
