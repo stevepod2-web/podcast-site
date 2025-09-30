@@ -16,7 +16,12 @@ def index():
 def podcast_page(podcast_id):
     podcast = next((p for p in podcasts if p["id"] == podcast_id), None)
     if podcast:
-        return render_template("podcast.html", podcast=podcast)
+        return render_template(
+            "podcast.html",
+            podcast=podcast,
+            seo_title=podcast.get("name", "Podcast"),
+            seo_description=podcast.get("seo_description", podcast.get("description", ""))
+        )
     return "Podcast not found", 404
 
 @app.route("/api/podcasts")
@@ -31,19 +36,6 @@ def favicon():
         'favicon.ico',
         mimetype='image/vnd.microsoft.icon'
     )
-
-# ✅ Test route to check assets
-@app.route("/test-assets")
-def test_assets():
-    return """
-    <h1>Test Assets</h1>
-    <p><b>Favicons:</b></p>
-    <img src='/static/bop.ico' alt='BOP Favicon' width='32'>
-    <img src='/static/wlb.ico' alt='WLB Favicon' width='32'>
-    <p><b>Artwork:</b></p>
-    <img src='/static/bop.png' alt='BOP Artwork' width='200'>
-    <img src='/static/wlb.png' alt='WLB Artwork' width='200'>
-    """
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)

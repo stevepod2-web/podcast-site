@@ -1,55 +1,35 @@
 [
   {
     "id": "bop",
-    "name": "Business of Podcasts",
+    "name": "Business on Purpose",
     "description": "Exploring the business side of podcasting.",
-    "artwork": "/static/bop.png",
-    "favicon": "/static/bop.ico",
+    "seo_description": "Business on Purpose is a Christian business podcast equipping entrepreneurs, leaders, and professionals to align their work with God’s calling. Whether you’re building a startup, leading a team, or navigating the pressures of profit and purpose, we explore servant leadership, biblical wisdom, and kingdom principles for the marketplace. From stewardship and vision to prayer and prophetic insight, we help you integrate faith with business in practical, powerful ways. Because business isn’t just about profit—it’s about purpose.",
+    "artwork": "bop.png",
     "episodes": [
       {
-        "id": "bop-ep1",
-        "title": "BOP Episode 1",
-        "description": "Intro to the business of podcasting.",
-        "audio_url": "/static/episodes/bop-ep1.mp3"
+        "title": "The Role of Faith in Business",
+        "file": "bop_ep1.mp3"
       },
       {
-        "id": "bop-ep2",
-        "title": "BOP Episode 2",
-        "description": "Growing your podcast audience.",
-        "audio_url": "/static/episodes/bop-ep2.mp3"
-      },
-      {
-        "id": "bop-ep3",
-        "title": "BOP Episode 3",
-        "description": "Monetization strategies.",
-        "audio_url": "/static/episodes/bop-ep3.mp3"
+        "title": "Servant Leadership in Action",
+        "file": "bop_ep2.mp3"
       }
     ]
   },
   {
     "id": "wlb",
-    "name": "Work-Life Balance",
+    "name": "When Life Bites",
     "description": "Conversations on maintaining balance in a busy world.",
-    "artwork": "/static/wlb.png",
-    "favicon": "/static/wlb.ico",
+    "seo_description": "When Life Bites is a Christian podcast offering hope, healing, and help to families walking through trauma, abuse, betrayal, and abandonment. Whether you’re a survivor of sexual abuse, facing family alienation, or grieving a broken marriage, we provide real talk, faith-based encouragement, and practical steps toward healing. Because life bites—but God heals.",
+    "artwork": "wlb.png",
     "episodes": [
       {
-        "id": "wlb-ep1",
-        "title": "WLB Episode 1",
-        "description": "Finding time for yourself.",
-        "audio_url": "/static/episodes/wlb-ep1.mp3"
+        "title": "Finding Hope After Trauma",
+        "file": "wlb_ep1.mp3"
       },
       {
-        "id": "wlb-ep2",
-        "title": "WLB Episode 2",
-        "description": "Managing work stress.",
-        "audio_url": "/static/episodes/wlb-ep2.mp3"
-      },
-      {
-        "id": "wlb-ep3",
-        "title": "WLB Episode 3",
-        "description": "Setting healthy boundaries.",
-        "audio_url": "/static/episodes/wlb-ep3.mp3"
+        "title": "Faith Through Brokenness",
+        "file": "wlb_ep2.mp3"
       }
     ]
   }
