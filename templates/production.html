@@ -1,0 +1,199 @@
+{% extends "dashboard_base.html" %}
+{% block content %}
+<div class="card p-3 mb-3">
+  <div class="d-flex justify-content-between align-items-center">
+    <h2 class="mb-0">Production Library</h2>
+    <div>
+      <button id="refreshBtn" class="btn btn-outline-secondary me-2"><i class="fa fa-sync-alt"></i> Refresh</button>
+      <button id="runSchedulerBtn" class="btn btn-primary"><i class="fa fa-play me-1"></i> Run Scheduler</button>
+    </div>
+  </div>
+</div>
+
+<div id="scheduler-progress" class="mb-3"></div>
+
+<div id="projects-container">
+  {% for project, episodes in projects.items() %}
+  <div class="card mb-3">
+    <div class="card-header project-header" data-bs-toggle="collapse" data-bs-target="#project-{{ loop.index }}">
+      <strong>{{ project }}</strong> <span class="small-muted">({{ episodes|length }} episodes)</span>
+    </div>
+    <div id="project-{{ loop.index }}" class="collapse">
+      <div class="card-body">
+        <table class="table table-hover mb-0" data-project="{{ project }}">
+          <thead>
+            <tr>
+              <th data-sort="filename">Filename <span class="sort-indicator"></span></th>
+              <th data-sort="size_mb">Size (MB) <span class="sort-indicator"></span></th>
+              <th data-sort="duration">Duration (s) <span class="sort-indicator"></span></th>
+              <th>Preview</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ep in episodes %}
+            <tr>
+              <td class="td-filename">{{ ep.filename }}</td>
+              <td class="td-size">{{ ep.size_mb }}</td>
+              <td class="td-duration">{{ ep.duration }}</td>
+              <td style="min-width:260px;">
+                <audio controls preload="none" style="width:100%;">
+                  <source src="{{ url_for('serve_production_audio', filename=ep.path) }}" type="audio/mpeg">
+                  Your browser does not support audio.
+                </audio>
+                <div class="waveform-holder mt-2" data-src="{{ url_for('serve_production_audio', filename=ep.path) }}"></div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<script>
+/* production.html client script (in-template) */
+(function() {
+  const AUDIO_LIST_API = "{{ url_for('production_audio_list') }}";
+  const RUN_SCHED_API = "{{ url_for('run_scheduler') }}";
+  const SCHED_STATUS_API = "{{ url_for('scheduler_status') }}";
+
+  async function fetchAudioList() {
+    try {
+      const r = await fetch(AUDIO_LIST_API);
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return await r.json();
+    } catch (e) {
+      console.warn('Could not fetch audio list JSON, using server-side fallback.', e);
+      return null;
+    }
+  }
+
+  function buildProjectsFromJSON(projects) {
+    const container = document.getElementById('projects-container');
+    container.innerHTML = '';
+    let idx = 0;
+    for (const [project, episodes] of Object.entries(projects)) {
+      idx++;
+      const card = document.createElement('div'); card.className='card mb-3';
+      const header = document.createElement('div'); header.className='card-header project-header';
+      header.setAttribute('data-bs-toggle','collapse'); header.setAttribute('data-bs-target','#project-'+idx);
+      header.innerHTML = `<strong>${project}</strong> <span class="small-muted">(${episodes.length} episodes)</span>`;
+      const collapse = document.createElement('div'); collapse.id='project-'+idx; collapse.className='collapse';
+      const body = document.createElement('div'); body.className='card-body';
+      const table = document.createElement('table'); table.className='table table-hover mb-0'; table.dataset.project=project;
+      table.innerHTML = `<thead><tr>
+          <th data-sort="filename">Filename <span class="sort-indicator"></span></th>
+          <th data-sort="size_mb">Size (MB) <span class="sort-indicator"></span></th>
+          <th data-sort="duration">Duration (s) <span class="sort-indicator"></span></th>
+          <th>Preview</th></tr></thead><tbody></tbody>`;
+      const tbody = table.querySelector('tbody');
+      for (const ep of episodes) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td class="td-filename">${ep.filename}</td>
+                        <td class="td-size">${ep.size_mb}</td>
+                        <td class="td-duration">${ep.duration}</td>
+                        <td style="min-width:260px;">
+                          <audio controls preload="none" style="width:100%;">
+                            <source src="/production/audio/${ep.path}" type="audio/mpeg">
+                          </audio>
+                          <div class="waveform-holder mt-2" data-src="/production/audio/${ep.path}"></div>
+                        </td>`;
+        tbody.appendChild(tr);
+      }
+      body.appendChild(table); collapse.appendChild(body); card.appendChild(header); card.appendChild(collapse);
+      container.appendChild(card);
+    }
+    wireSortHandlers();
+  }
+
+  function wireSortHandlers() {
+    document.querySelectorAll('table.table thead th[data-sort]').forEach(th => {
+      th.style.cursor='pointer';
+      th.addEventListener('click', () => {
+        const table = th.closest('table'); const tbody = table.querySelector('tbody');
+        const col = Array.from(th.parentNode.children).indexOf(th);
+        const asc = !th.classList.contains('asc'); table.querySelectorAll('.sort-indicator').forEach(si=>si.textContent='');
+        th.querySelector('.sort-indicator').textContent = asc ? ' ▲' : ' ▼'; th.classList.toggle('asc', asc);
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        rows.sort((a,b)=> {
+          const aText = a.children[col].innerText.trim(), bText = b.children[col].innerText.trim();
+          const aNum = parseFloat(aText.replace(/[^0-9.\-]/g,'')), bNum = parseFloat(bText.replace(/[^0-9.\-]/g,''));
+          if (!isNaN(aNum) && !isNaN(bNum)) return asc ? aNum - bNum : bNum - aNum;
+          return asc ? aText.localeCompare(bText) : bText.localeCompare(aText);
+        });
+        rows.forEach(r=>tbody.appendChild(r));
+      });
+    });
+  }
+
+  function initWaveformsIn(node) {
+    if (!window.WaveSurfer) return;
+    const holders = (node || document).querySelectorAll('.waveform-holder[data-src]');
+    holders.forEach(holder => {
+      if (holder.dataset.inited === '1') return;
+      const src = holder.dataset.src;
+      holder.innerHTML = '';
+      const ws = WaveSurfer.create({ container: holder, height:48, waveColor:'#7aa7ff', progressColor:'#0d6efd', responsive:true, normalize:true, backend:'MediaElement', hideScrollbar:true });
+      holder.dataset.inited = '1';
+      ws.load(src);
+      holder.addEventListener('click', ()=>{ try { ws.playPause(); } catch(e) { console.warn(e); } });
+    });
+  }
+
+  async function initialize() {
+    const json = await fetchAudioList();
+    if (json) buildProjectsFromJSON(json);
+    document.addEventListener('shown.bs.collapse', ev => initWaveformsIn(ev.target));
+    initWaveformsIn(document);
+    wireSortHandlers();
+  }
+
+  let schedulerPollTimer = null;
+  function renderScheduler(jobs) {
+    const container = document.getElementById('scheduler-progress');
+    if (!jobs || jobs.length === 0) { container.innerHTML = ''; return; }
+    let html = '<div class="card p-3 mb-3"><div class="mb-2"><strong>Scheduler</strong></div>';
+    for (const job of jobs) {
+      html += `<div class="mb-2"><div class="d-flex justify-content-between small-muted"><div>${job.task}</div><div>${job.status} ${job.progress ? job.progress + '%' : ''}</div></div>
+               <div class="progress" style="height:10px;"><div class="progress-bar" role="progressbar" style="width:${job.progress || 0}%" aria-valuenow="${job.progress || 0}" aria-valuemin="0" aria-valuemax="100"></div></div></div>`;
+    }
+    html += '</div>';
+    container.innerHTML = html;
+  }
+
+  async function pollSchedulerStatus() {
+    try {
+      const r = await fetch(SCHED_STATUS_API);
+      if (!r.ok) throw new Error('sched status http ' + r.status);
+      const jobs = await r.json();
+      renderScheduler(jobs);
+    } catch (e) { console.warn('scheduler poll error:', e); }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const refreshBtn = document.getElementById('refreshBtn');
+    const runBtn = document.getElementById('runSchedulerBtn');
+    if (refreshBtn) refreshBtn.addEventListener('click', ()=>location.reload());
+    if (runBtn) {
+      runBtn.addEventListener('click', async ()=> {
+        try {
+          runBtn.disabled = true;
+          const r = await fetch(RUN_SCHED_API, { method: 'POST' });
+          if (!r.ok) throw new Error('run sched http '+r.status);
+          const result = await r.json();
+          console.log('Scheduler started:', result);
+          if (schedulerPollTimer) clearInterval(schedulerPollTimer);
+          await pollSchedulerStatus();
+          schedulerPollTimer = setInterval(pollSchedulerStatus, 1000);
+        } catch (e) { console.error('Failed to start scheduler:', e); runBtn.disabled = false; }
+      });
+    }
+    pollSchedulerStatus();
+  });
+
+  initialize();
+})();
+</script>
+{% endblock %}
