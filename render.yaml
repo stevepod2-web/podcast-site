@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: podcast-dashboard
+    env: python
+    plan: free
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+    startCommand: gunicorn dashboard:app --bind 0.0.0.0:$PORT
+    autoDeploy: true
+    envVars:
+      - key: PRODUCTION_DIR
+        value: /home/render/project/Podcasts/Production

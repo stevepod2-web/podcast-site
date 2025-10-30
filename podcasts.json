@@ -1,0 +1,18 @@
+[
+  {
+    "name": "bop",
+    "title": "Business on Purpose",
+    "description": "A podcast about building a business with purpose.",
+    "artwork": "bop.png",
+    "favicon": "bop-favicon.ico",
+    "feed": "https://example.com/bop.xml"
+  },
+  {
+    "name": "wlb",
+    "title": "When Life Bites",
+    "description": "Stories and conversations about life’s unexpected turns.",
+    "artwork": "wlb.png",
+    "favicon": "wlb-favicon.ico",
+    "feed": "https://example.com/wlb.xml"
+  }
+]
